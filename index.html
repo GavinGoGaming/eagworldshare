@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quadpad Export</title>
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://legacy.klash.dev/legacy.css">
+<link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.6.0/css/all.css">
+<style>
+    /* CSS */
+html, body {
+    background: #111;
+    color: white;
+    font-family: Inter;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+}
+h1 {
+    display: flex;
+    align-items: center;
+    margin: 2px 0;
+}
+.font-legacy {
+    font-family: KlashLegacyClassic;
+}
+.space1 {
+    width: 2px;
+    height: 1px;
+    display: inline-flex;
+}
+a:link, a:visited {
+    color: lightskyblue;
+    font-weight: 700;
+}
+.blue {
+    color: rgb(182, 255, 210) !important;
+}
+.space5 {
+    width: 5px;
+}
+.mc-input {
+    font-family: KlashLegacy;
+    color: white;
+    height: 30px;
+    width: 200px;
+    border: 2px solid #A0A0A0;
+    background: black;
+    font-size: 20px;
+    padding: 0 5px;
+    caret-color: #a0a0a0;
+}
+.mc-label {
+    width: 210px;
+    font-family: KlashLegacy;
+    color: #acacac;
+}
+.mc-input:focus-visible {
+    outline: 0;
+}
+.gap {
+    width: 1px;
+    height: 20px;
+}
+.w-253 {
+    width: 253px;
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+}
+.mc-btn-square {
+    background: #ffffff40;
+    border: 2px solid;
+    border-top-color: #a0a0a0;
+    border-left-color: #a0a0a0;
+    border-bottom-color: #a0a0a050;
+    border-right-color: #a0a0a050;
+    width: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mc-btn {
+    background: #ffffff40;
+    border: 2px solid;
+    border-top-color: #a0a0a0;
+    border-left-color: #a0a0a0;
+    border-bottom-color: #a0a0a050;
+    border-right-color: #a0a0a050;
+    display: flex;
+    align-items: center;
+    width: 215px;
+    height: 30px;
+    color: white;
+    font-family: KlashLegacy;
+    justify-content: center;
+}
+.mc-btn-square i {
+    font-size: 18px;
+    color: #dcffdc;
+    transition: all 0.2s;
+}
+.mc-btn-square:active {
+    border-top-color: #bdbdbd;
+    border-left-color: #bdbdbd;
+    border-bottom-color: #bdbdbd70;
+    border-right-color: #bdbdbd70;
+    background: #ffffff50;
+}
+.mc-btn-square:hover i {
+    color: #ccffcc;
+    scale: 1.1;
+}
+
+.orange {
+    color: rgb(255, 158, 68) !important;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background: #000c;
+    border-top: 2px solid #a0a0a040;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: KlashLegacy;
+}
+.v-bar {
+    height: 60%;
+    width: 2px;
+    background: #a0a0a040;
+    margin: 0 10px;
+}
+.current-shared {
+    display: flex;
+    gap: 10px;
+    width: 80vw;
+}
+.slot {
+    flex: 1;
+    height: 200px;
+    background: #1c1c1c;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 6px;
+    gap: 5px;
+}
+.warning {
+    color: rgb(255, 136, 136);
+}
+.image {
+    width: 50%;
+    aspect-ratio: 1;
+    background: url("https://packpng.com/static/pack.png");
+    background-size: cover;
+    border-radius: 6px;
+    background-position: 50%;
+    display: flex;
+    align-items: center;
+    filter: grayscale(0.9);
+    justify-content: center;
+    transition: all 0.2s;
+    text-shadow: 2px 2px 0px black;
+}
+.slot:hover > .image {
+    filter: grayscale(0);
+}
+.code {
+    font-family: 'JetBrains Mono';
+    transition: all 0.2s;
+    font-weight: 500;
+}
+.slot:hover > .image > .code {
+    font-size: 20px;
+}
+.icons button {
+    color: white;
+    background: #333;
+    border: 2px solid #a0a0a070;
+    padding: 3px 12px;
+    cursor: pointer;
+}
+.icons button i {
+    transition: scale 0.2s;
+}
+.icons button:hover i {
+    scale: 1.1;
+}
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 20px;
+        margin-top: 50px;
+    }
+    .current-shared {
+        width: calc(90vw - 20px);
+        flex-direction: column;
+    }
+    .footer {
+        top: 0;
+        border-bottom: 2px solid #a0a0a040;
+    }
+}
+
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+<body>
+<h1 class="font-legacy">E<span class="space1"></span>AG WORLD SH<span class="space1"></span>ARE</h1>
+
+<div class="user-sel">
+    <div class="mc-label w-253">username</div>
+    <div class="w-253">
+        <input type="text" maxlength="32" id="username" class="mc-input" spellcheck="false">
+        <button class="mc-btn-square" id="submit-username"><i class="fa-solid fa-circle-check"></i></button>
+    </div>
+</div>
+<div class="current-shared hidden">
+</div>
+<button class="mc-btn hidden" id="show-submit">SUBMIT YOUR OWN</button>
+<div class="submit-post hidden">
+    <b>Submit YOUR world</b>
+    <div class="mc-label">world name</div>
+    <input type="text" maxlength="20" id="submission-title" class="mc-input" spellcheck="false">
+    <div class="gap"></div>
+    <div class="mc-label">shared world code</div>
+    <input type="text" maxlength="20" id="submission-code" class="mc-input" spellcheck="false">
+    <div class="gap"></div>
+    <button class="mc-btn submit-o">TO SLOT 1</button>
+    <button class="mc-btn submit-t">TO SLOT 2</button>
+    <button class="mc-btn submit-th">TO SLOT 3</button>
+</div>
+
+<div class="gap"></div>
+<span class="warning"><i class="fa-solid fa-warning"></i> Not curated - join at your own risk <i class="fa-solid fa-warning"></i></span>
+<span class="warning blue">Don't submit worlds from modded clients</span>
+<div class="footer">
+    BY <span class="space5"></span> <a href="//klash.dev" target="_blank" class="orange">KLASH</a>.dev
+    <div class="v-bar"></div>
+    OUR <span class="space5"></span> <a href="//legacy.klash.dev" target="_blank">FONT</a>
+</div>
+<script type="text/javascript">
+    // Select necessary DOM elements
+var typeUsername = document.querySelector('#username');
+var submitUsername = document.querySelector('#submit-username');
+
+// Functions to update the UI with shared worlds
+function updateCurrentShared(worlds) {
+    const currentShared = document.querySelector('.current-shared');
+    document.querySelectorAll('.slot').forEach(x=>x.remove());
+
+    worlds.forEach((world) => {
+        const slot = document.createElement('div');
+        slot.classList.add('slot');
+
+        const title = document.createElement('span');
+        title.textContent = world.title;
+        title.classList.add('title');
+        slot.appendChild(title);
+
+        const image = document.createElement('div');
+        image.classList.add('image');
+
+        const code = document.createElement('span');
+        code.textContent = world.code;
+        code.classList.add('code');
+        image.appendChild(code);
+
+        const user = document.createElement('span');
+        user.textContent = `${world.player}`;
+        user.classList.add('from');
+
+        const icons = document.createElement('div');
+        icons.classList.add('icons');
+
+        const copy = document.createElement('button');
+
+        const icon = document.createElement('i');
+        icon.className = "fa-solid fa-clone";
+        icon.addEventListener('click', e => {
+            // navigator.clipboard.writeText(world.code);
+            alert(JSON.stringify(world));
+        })
+        copy.appendChild(icon);
+        icons.appendChild(copy);
+        slot.appendChild(image);
+        slot.appendChild(user);
+        slot.appendChild(icons);
+        currentShared.appendChild(slot);
+    });
+}
+
+// Function to post data to the slots endpoint
+async function post(data, slot) {
+    try {
+        const response = await fetch(`https://klipsapi.fly.dev/slots`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ...data, slot })
+        });
+
+        if (response.ok) {
+            console.log(`Slot ${slot} updated successfully`);
+            document.querySelector('.submit-post').classList.add('hidden');
+            document.querySelector('.current-shared').classList.remove('hidden');
+            document.querySelector('#show-submit').classList.remove('hidden');
+            fetchShared();
+        } else {
+            console.error(`Failed to update slot ${slot}`);
+        }
+    } catch (error) {
+        console.error('Error posting data:', error);
+    }
+}
+
+// Fetch and load shared worlds
+async function fetchShared() {
+    const worlds = [];
+    for (let slot = 1; slot <= 3; slot++) {
+        try {
+            const response = await fetch(`https://klipsapi.fly.dev/slots/${slot}`);
+            if (response.ok) {
+                const world = await response.json();
+                worlds.push(world);
+            } else {
+                console.log(`Slot ${slot} is empty`);
+            }
+        } catch (error) {
+            console.error(`Error fetching slot ${slot}:`, error);
+        }
+    }
+    updateCurrentShared(worlds);
+}
+
+// Load username from localStorage
+window.username = window.localStorage.ewsUsername || '';
+if (window.localStorage.ewsUsername && window.localStorage.ewsUsername.trim() != '') {
+    typeUsername.value = window.username;
+}
+
+// Submit username and show submit-post section
+submitUsername.addEventListener('click', (e) => {
+    window.localStorage.ewsUsername = typeUsername.value;
+    window.username = typeUsername.value;
+    document.querySelector('.current-shared').classList.remove('hidden');
+    document.querySelector('.user-sel').classList.add('hidden');
+    document.querySelector('#show-submit').classList.remove('hidden');
+});
+
+// Submit to slots
+document.querySelector('.submit-o').addEventListener('click', () => {
+    const title = document.querySelector('#submission-title').value;
+    const code = document.querySelector('#submission-code').value;
+    const player = window.username;
+    if (title && code && player) {
+        post({ title, code, player }, 1);
+    }
+});
+
+document.querySelector('.submit-t').addEventListener('click', () => {
+    const title = document.querySelector('#submission-title').value;
+    const code = document.querySelector('#submission-code').value;
+    const player = window.username;
+    if (title && code && player) {
+        post({ title, code, player }, 2);
+    }
+});
+
+document.querySelector('.submit-th').addEventListener('click', () => {
+    const title = document.querySelector('#submission-title').value;
+    const code = document.querySelector('#submission-code').value;
+    const player = window.username;
+    if (title && code && player) {
+        post({ title, code, player }, 3);
+    }
+});
+
+document.querySelector('#show-submit').addEventListener('click', e => {
+    document.querySelector('#show-submit').classList.add('hidden');
+    document.querySelector('.current-shared').classList.add('hidden');
+    document.querySelector('.submit-post').classList.remove('hidden');
+});
+
+// Fetch and display shared worlds on page load
+fetchShared();
+
+</script>
+    
+</body>
+</html>
+                
