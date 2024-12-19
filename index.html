@@ -291,8 +291,8 @@ function updateCurrentShared(worlds) {
         const icon = document.createElement('i');
         icon.className = "fa-solid fa-clone";
         icon.addEventListener('click', e => {
-            // navigator.clipboard.writeText(world.code);
-            alert(JSON.stringify(world));
+            navigator.clipboard.writeText(world.code);
+            alert("Copied " + world.code);
         })
         copy.appendChild(icon);
         icons.appendChild(copy);
