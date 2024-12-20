@@ -100,25 +100,35 @@ a:link, a:visited {
     font-family: KlashLegacy;
     justify-content: center;
 }
-.mc-btn-square i {
+.mc-btn-square i, .mc-btn i {
     font-size: 18px;
     color: #dcffdc;
     transition: all 0.2s;
 }
-.mc-btn-square:active {
+.mc-btn-square:active, .mc-btn:active {
     border-top-color: #bdbdbd;
     border-left-color: #bdbdbd;
     border-bottom-color: #bdbdbd70;
     border-right-color: #bdbdbd70;
     background: #ffffff50;
 }
-.mc-btn-square:hover i {
+.mc-btn-square:hover i, .mc-btn:hover i {
     color: #ccffcc;
     scale: 1.1;
 }
 
 .orange {
     color: rgb(255, 158, 68) !important;
+}
+.purple {
+    color: #E77FF8 !important;
+}
+.green {
+    color: #7ff8a7 !important;
+}
+.clicky {
+    text-decoration: underline;
+    cursor: pointer;
 }
 .footer {
     position: absolute;
@@ -162,6 +172,7 @@ a:link, a:visited {
     width: 50%;
     aspect-ratio: 1;
     background: url("https://packpng.com/static/pack.png");
+    max-width: 123px;
     background-size: cover;
     border-radius: 6px;
     background-position: 50%;
@@ -183,6 +194,10 @@ a:link, a:visited {
 .slot:hover > .image > .code {
     font-size: 20px;
 }
+.icons {
+    gap: 2px;
+    display: flex;
+}
 .icons button {
     color: white;
     background: #333;
@@ -196,10 +211,18 @@ a:link, a:visited {
 .icons button:hover i {
     scale: 1.1;
 }
+.small {
+    font-size: 20px;
+    margin-left: 5px;
+    letter-spacing: 1px;
+}
 @media only screen and (max-width: 600px) {
     h1 {
         font-size: 20px;
         margin-top: 50px;
+    }
+    .small {
+        font-size: 14px;
     }
     .current-shared {
         width: calc(90vw - 20px);
@@ -208,6 +231,9 @@ a:link, a:visited {
     .footer {
         top: 0;
         border-bottom: 2px solid #a0a0a040;
+    }
+    .filler {
+        display: none;
     }
 }
 
@@ -218,7 +244,7 @@ a:link, a:visited {
 </style>
 </head>
 <body>
-<h1 class="font-legacy">E<span class="space1"></span>AG WORLD SH<span class="space1"></span>ARE</h1>
+<h1 class="font-legacy">E<span class="space1"></span>AG WORLD SH<span class="space1"></span>ARE <span class="small">r2</span></h1>
 
 <div class="user-sel">
     <div class="mc-label w-253">username</div>
@@ -230,14 +256,14 @@ a:link, a:visited {
 <div class="current-shared hidden">
 </div>
 <button class="mc-btn hidden" id="show-submit">SUBMIT YOUR OWN</button>
-<button class="mc-btn" onclick="fetchShared()">REFRESH LIST</button>
+<button class="mc-btn" id="refresh-list">REFRESH LIST</button>
 <div class="submit-post hidden">
     <b>Submit YOUR world</b>
     <div class="mc-label">world name</div>
     <input type="text" maxlength="20" id="submission-title" class="mc-input" spellcheck="false">
     <div class="gap"></div>
     <div class="mc-label">shared world code</div>
-    <input type="text" maxlength="20" id="submission-code" class="mc-input" spellcheck="false">
+    <input type="text" maxlength="5" id="submission-code" class="mc-input" spellcheck="false">
     <div class="gap"></div>
     <button class="mc-btn submit-o">TO SLOT 1</button>
     <button class="mc-btn submit-t">TO SLOT 2</button>
@@ -246,14 +272,19 @@ a:link, a:visited {
 
 <div class="gap"></div>
 <span class="warning"><i class="fa-solid fa-warning"></i> Not curated - join at your own risk <i class="fa-solid fa-warning"></i></span>
-<span class="warning blue">Don't submit worlds from modded clients</span>
+<span class="warning blue">Mention client name if modded</span>
 <div class="footer">
-    BY <span class="space5"></span> <a href="//klash.dev" target="_blank" class="orange">KLASH</a>.dev
+    <span class="filler">BY</span> <span class="space5"></span> <a href="//klash.dev" target="_blank" class="orange">KLASH</a><span class="filler">.dev</span>
     <div class="v-bar"></div>
-    OUR <span class="space5"></span> <a href="//legacy.klash.dev" target="_blank">FONT</a>
+    <span class="filler">OUR</span> <span class="space5"></span> <a href="//legacy.klash.dev" target="_blank">FONT</a>
+    <div class="v-bar"></div>
+    <span class="filler">EWS</span> <span class="space5"></span> <a onclick="alert('contact gavingogaming on discord for custom frontend usage')" class="purple clicky">API</a>
+    <div class="v-bar"></div>
+    <span class="filler">GET</span> <span class="space5"></span> <a class="clicky green" id="offline-dl">OFFLINE</a>
 </div>
 <script type="text/javascript">
-    // Select necessary DOM elements
+    var offlineLink = "https://raw.githubusercontent.com/gavingogaming/eagworldshare/refs/heads/main/index.html";
+// Select necessary DOM elements
 var typeUsername = document.querySelector('#username');
 var submitUsername = document.querySelector('#submit-username');
 
@@ -290,12 +321,21 @@ function updateCurrentShared(worlds) {
 
         const icon = document.createElement('i');
         icon.className = "fa-solid fa-clone";
-        icon.addEventListener('click', e => {
+        copy.addEventListener('click', e => {
             navigator.clipboard.writeText(world.code);
-            alert("Copied " + world.code);
         })
         copy.appendChild(icon);
         icons.appendChild(copy);
+
+        const json = document.createElement('button');
+        const codeicon = document.createElement('i');
+        codeicon.className = "fa-solid fa-file-code";
+        json.addEventListener('click', e => {
+            prompt("JSON Data", JSON.stringify(world));
+        })
+        json.appendChild(codeicon);
+        icons.appendChild(json);
+
         slot.appendChild(image);
         slot.appendChild(user);
         slot.appendChild(icons);
@@ -353,52 +393,124 @@ if (window.localStorage.ewsUsername && window.localStorage.ewsUsername.trim() !=
     typeUsername.value = window.username;
 }
 
+const regex = [
+    "n+[i1]+[gq|GQ]+[e|a3]*r+[s\$]*",
+    '^[a@][s$][s$]$',
+    '[a@][s$][s$]h[o0][l1][e3][s$]?', 'b[a@][s$][t+][a@]rd ', 'b[e3][a@][s$][t+][i1][a@]?[l1]([i1][t+]y)?', 'b[e3][a@][s$][t+][i1][l1][i1][t+]y', 'b[e3][s$][t+][i1][a@][l1]([i1][t+]y)?', 'b[i1][t+]ch[s$]?', 'b[i1][t+]ch[e3]r[s$]?', 'b[i1][t+]ch[e3][s$]', 'b[i1][t+]ch[i1]ng?', 'b[l1][o0]wj[o0]b[s$]?', 'c[l1][i1][t+]', '^(c|k|ck|q)[o0](c|k|ck|q)[s$]?$', '(c|k|ck|q)[o0](c|k|ck|q)[s$]u', '(c|k|ck|q)[o0](c|k|ck|q)[s$]u(c|k|ck|q)[e3]d ', '(c|k|ck|q)[o0](c|k|ck|q)[s$]u(c|k|ck|q)[e3]r', '(c|k|ck|q)[o0](c|k|ck|q)[s$]u(c|k|ck|q)[i1]ng', '(c|k|ck|q)[o0](c|k|ck|q)[s$]u(c|k|ck|q)[s$]', '^cum[s$]?$', 'cumm??[e3]r', 'cumm?[i1]ngcock', '(c|k|ck|q)um[s$]h[o0][t+]', '(c|k|ck|q)un[i1][l1][i1]ngu[s$]', '(c|k|ck|q)un[i1][l1][l1][i1]ngu[s$]', '(c|k|ck|q)unn[i1][l1][i1]ngu[s$]', '(c|k|ck|q)un[t+][s$]?', '(c|k|ck|q)un[t+][l1][i1](c|k|ck|q)', '(c|k|ck|q)un[t+][l1][i1](c|k|ck|q)[e3]r', '(c|k|ck|q)un[t+][l1][i1](c|k|ck|q)[i1]ng', 'cyb[e3]r(ph|f)u(c|k|ck|q)', 'd[a@]mn', 'd[i1]ck', 'd[i1][l1]d[o0]', 'd[i1][l1]d[o0][s$]', 'd[i1]n(c|k|ck|q)', 'd[i1]n(c|k|ck|q)[s$]', '[e3]j[a@]cu[l1]', '(ph|f)[a@]g[s$]?', '(ph|f)[a@]gg[i1]ng', '(ph|f)[a@]gg?[o0][t+][s$]?', '(ph|f)[a@]gg[s$]', '(ph|f)[e3][l1][l1]?[a@][t+][i1][o0]', '(ph|f)u(c|k|ck|q)', '(ph|f)u(c|k|ck|q)[s$]?', 'g[a@]ngb[a@]ng[s$]?', 'g[a@]ngb[a@]ng[e3]d', 'g[a@]y', 'h[o0]m?m[o0]', 'h[o0]rny', 'j[a@](c|k|ck|q)-?[o0](ph|f)(ph|f)?', 'j[e3]rk-?[o0](ph|f)(ph|f)?', 'j[i1][s$z][s$z]?m?', '[ck][o0]ndum[s$]?', 'mast(e|ur)b(8|ait|ate)', 'n+[i1]+[gq]+[e3]*r+[s$]*', '[o0]rg[a@][s$][i1]m[s$]?', '[o0]rg[a@][s$]m[s$]?', 'p[e3]nn?[i1][s$]', 'p[i1][s$][s$]', 'p[i1][s$][s$][o0](ph|f)(ph|f) ', 'p[o0]rn', 'p[o0]rn[o0][s$]?', 'p[o0]rn[o0]gr[a@]phy', 'pr[i1]ck[s$]?', 'pu[s$][s$][i1][e3][s$]', 'pu[s$][s$]y[s$]?', '[s$][e3]x', '[s$]h[i1][t+][s$]?', '[s$][l1]u[t+][s$]?', '[s$]mu[t+][s$]?', '[s$]punk[s$]?', '[t+]w[a@][t+][s$]?'
+]
+const badwords = [
+    "fuck",
+    "f@ck",
+    "f4ck",
+    "fuk",
+    "sh1t",
+    "shit",
+    "bitch",
+    "b1tch",
+    "b!tch",
+    "asshole",
+    "a$$hole",
+    "a55hole",
+    "dick",
+    "d1ck",
+    "d!ck",
+    "pussy",
+    "pu55y",
+    "p@ssy",
+    "nigger",
+    "n1gger",
+    "n!gger",
+    "ni9a",
+    "niga",
+    "n1ga",
+    "n!ga",
+    "ni99a",
+    "nigga",
+    "n1gga",
+    "n!gga",
+    "ni99er",
+    "faggot",
+    "f@ggot",
+    "f4ggot",
+    "cunt",
+    "c*nt",
+    "c@nt",
+    "whore",
+    "wh0re",
+    "w#ore",
+    "slut",
+    "5lut",
+    "s1ut"
+];
+function filter(input) {
+    return new Promise((resolve, reject) => {
+        var x = false;
+        regex.forEach(rgx => {
+            var r = new RegExp(rgx);
+            if(r.test(input)) {
+                resolve(true);
+                x = true;
+            }
+        })
+        const normalized = input.toLowerCase()
+            .replace(/@/g, "a")
+            .replace(/4/g, "a")
+            .replace(/0/g, "o")
+            .replace(/1/g, "i")
+            .replace(/5/g, "s")
+            .replace(/\$/g, "s")
+            .replace(/#/g, "");
+        if (!x) resolve(badwords.some(word => normalized.includes(word)));
+    });
+}
+
 // Submit username and show submit-post section
 submitUsername.addEventListener('click', (e) => {
-    window.localStorage.ewsUsername = typeUsername.value;
-    window.username = typeUsername.value;
-    document.querySelector('.current-shared').classList.remove('hidden');
-    document.querySelector('.user-sel').classList.add('hidden');
-    document.querySelector('#show-submit').classList.remove('hidden');
+    filter(typeUsername.value).then(x => {
+        if(x) return alert("Please change your ingame name to share! You may type a non-existant name ONLY to view worlds."); 
+        window.localStorage.ewsUsername = typeUsername.value;
+        window.username = typeUsername.value;
+        document.querySelector('.current-shared').classList.remove('hidden');
+        document.querySelector('.user-sel').classList.add('hidden');
+        document.querySelector('#show-submit').classList.remove('hidden');
+    })
 });
 
 // Submit to slots
-document.querySelector('.submit-o').addEventListener('click', () => {
-    const title = document.querySelector('#submission-title').value;
-    const code = document.querySelector('#submission-code').value;
-    const player = window.username;
-    if (title && code && player) {
-        post({ title, code, player }, 1);
-    }
-});
-
-document.querySelector('.submit-t').addEventListener('click', () => {
-    const title = document.querySelector('#submission-title').value;
-    const code = document.querySelector('#submission-code').value;
-    const player = window.username;
-    if (title && code && player) {
-        post({ title, code, player }, 2);
-    }
-});
-
-document.querySelector('.submit-th').addEventListener('click', () => {
-    const title = document.querySelector('#submission-title').value;
-    const code = document.querySelector('#submission-code').value;
-    const player = window.username;
-    if (title && code && player) {
-        post({ title, code, player }, 3);
-    }
-});
+['o','t','th'].map((element, index) => {
+    document.querySelector('.submit-'+element).addEventListener('click', () => {
+        const title = document.querySelector('#submission-title').value;
+        const code = document.querySelector('#submission-code').value;
+        const player = window.username;
+        if (title && code && player) {
+            post({ title, code, player }, index+1);
+        }
+    });
+})
 
 document.querySelector('#show-submit').addEventListener('click', e => {
     document.querySelector('#show-submit').classList.add('hidden');
     document.querySelector('.current-shared').classList.add('hidden');
     document.querySelector('.submit-post').classList.remove('hidden');
 });
+document.querySelector('#refresh-list').addEventListener('click', e => {
+    fetchShared();
+
+    setTimeout(()=>{fetchShared()},1000);
+});
+document.querySelector('#offline-dl').addEventListener('click', e => {
+    fetch(offlineLink).then(x => x.text()).then(page => {
+        var url = URL.createObjectURL(new Blob([page], {type: 'text/html'}));
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'eagworldshare.html';
+        link.click();
+        URL.revokeObjectURL(url);
+    });
+});
 
 // Fetch and display shared worlds on page load
 fetchShared();
-
 </script>
     
 </body>
